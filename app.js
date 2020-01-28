@@ -17,7 +17,6 @@ srv.listen(PORT, function(){
   console.log('Server started on *:' + PORT);
 });
 
-
 socket.on('connection', function(client) {
   client.on('APPLICANT::COMPLETE', function(data) {
     controller.Applicant(data);
