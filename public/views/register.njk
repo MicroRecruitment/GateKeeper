@@ -9,7 +9,7 @@
             <input type="text"      name="email"    placeholder="Email"/>
             <input type="text"      name="username" placeholder="Username"/>
             <input type="password"  name="password" placeholder="Password"/>
-            <button id="reg">LOGIN</button>
+            <button id="reg">REGISTER</button>
         </form>
     </div>
     <script>
@@ -17,7 +17,8 @@
         $('#reg').on('click', function (evt) {
             evt.preventDefault();
             console.log('Websocket -> Gateway (Register)');
-            var form_data = $('register').serializeArray();
+            var form_data = $('#register').serializeArray();
+            console.log(form_data);
             socket.emit('APPLICANT::REGISTER', form_data, function(reply) {
                   console.log(reply);
             });
