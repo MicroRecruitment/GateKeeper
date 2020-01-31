@@ -1,76 +1,79 @@
 {% extends './layout.njk' %}
 
 {% block content %}
-    <div class="form">
-        <form id="register" class="loginForm" method="POST">
-            <input
-                type="text"
-                name="name"
-                placeholder="Forename"
-                pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
-                required
-                value="Test"
-                />
-            <input
-                type="text"
-                name="surname"
-                placeholder="Surname"
-                pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
-                required
-                value="Testsson"
-                />
-            <input
-                type="text"
-                name="ssn"
-                placeholder="Social Security Number"
-                pattern="^\d{6,8}[-|(\s)]{0,1}\d{4}$"
-                required
-                value="20200120-1234"
-                />
-            <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                required
-                value="test@domain.com"
-                />
-            <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                pattern="^[a-zA-ZåäöÅÄÖ]{1,255}$"
-                required
-                value="test"
-                />
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-                value="test"
-                />
-            <button id="reg">REGISTER</button>
-        </form>
-    </div>
-    <script>
-        var socket = io();
-        $('form#register').on('submit', function (evt) {
-          evt.preventDefault();
-          console.log('Websocket -> Gateway (Register)');
+<div class="form">
+  <form id="register" class="loginForm" method="POST">
+    <input
+        type="text"
+        name="name"
+        placeholder="Forename"
+        pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
+        required
+        value="Test"
+    />
+    <input
+        type="text"
+        name="surname"
+        placeholder="Surname"
+        pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
+        required
+        value="Testsson"
+    />
+    <input
+        type="text"
+        name="ssn"
+        placeholder="Social Security Number"
+        pattern="^\d{6,8}[-|(\s)]{0,1}\d{4}$"
+        required
+        value="20200120-1234"
+    />
+    <input
+        type="text"
+        name="email"
+        placeholder="Email"
+        required
+        value="test@domain.com"
+    />
+    <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        pattern="^[a-zA-ZåäöÅÄÖ]{1,255}$"
+        required
+        value="test"
+    />
+    <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+        value="test"
+    />
+    <button id="reg">REGISTER</button>
+  </form>
+</div>
+<script>
+  var socket = io();
 
-          var formData = new FormData(document.getElementById("register"));
-          var object = {};
-          formData.forEach((value, key) => {object[key] = value});
+  $('form#register').on('submit', function (evt) {
+    evt.preventDefault();
+    console.log('Websocket -> Gateway (Register)');
 
-          console.log(object);
+    var formData = new FormData(document.getElementById("register"));
+    var object = {};
+    formData.forEach((value, key) => {
+      object[key] = value
+    });
 
-          socket.emit('APPLICANT::REGISTER', object, function(reply) {
-            console.log(reply);
-            if (reply.status) {
-              window.location = '/home';
-            }
-          });
-          return false;
-        });
-    </script>
+    console.log(object);
+
+    socket.emit('APPLICANT::REGISTER', object, function (reply) {
+      console.log(reply);
+      if (reply.status) {
+        window.location = '/home';
+      }
+    });
+    return false;
+  });
+</script>
 {% endblock %}
