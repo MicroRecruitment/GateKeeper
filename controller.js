@@ -24,7 +24,7 @@ class Controller {
   Process(msg) {
 		var call_id = msg.data.call_id;
 		console.log(msg);
-
+		console.log(this.ongoing_);
 		/* Client callback, tell client what happened. */
 		this.ongoing_[call_id]('Result: OK');
 		delete this.ongoing_[call_id];
