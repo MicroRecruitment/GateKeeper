@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const nunjucks  = require('nunjucks');
 const io = require('socket.io');
 const http = require('http');
 const ctrl = require('./controller.js');
@@ -16,6 +17,19 @@ var controller = new ctrl();
 
 app.use(express.static('./public'));
 
+nunjucks.configure('./public/views', {
+  express: app
+})
+
+// Routes
+app.get('/register', (req, res, next) =>{
+  res.render('register.njk')
+})
+
+app.use((req, res, next) =>{
+  res.render('index.njk')
+})
+
 srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
 });
@@ -23,6 +37,7 @@ srv.listen(PORT, function() {
 /* Setup Socket.io events. */
 socket.on('connection', function(client) {
 	console.log('Connected Client id: ' + client.id);
+
 	/* Client completed registration. */
   client.on('APPLICANT::REGISTER', function(registration_data) {
     console.log('Gateway (Websocket Event)');
