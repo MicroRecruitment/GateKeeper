@@ -4,7 +4,7 @@ const model = require('./model.js');
 const uuidv4 = require('uuid/v4');
 
 /* Queues to send requests to. */
-const APP_QUEUE = 'applicant_queue';
+const APP_QUEUE = 'applicant_queue_linus';
 const ADMIN_QUEUE = 'admin_queue';
 
 class Controller {
@@ -26,7 +26,10 @@ class Controller {
 		console.log(msg);
 		console.log(this.ongoing_);
 		/* Client callback, tell client what happened. */
-		this.ongoing_[call_id]('Result: OK');
+		this.ongoing_[call_id]({
+			status: msg.data.status,
+			result: msg.data.result
+		});
 		delete this.ongoing_[call_id];
   }
 
