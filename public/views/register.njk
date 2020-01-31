@@ -1,27 +1,27 @@
 {% extends './layout.njk' %}
 
 {% block content %}
-<div class="form">
-  <form id="register" class="loginForm" method="POST">
-    <input type="text"      name="name"     placeholder="Name"/>
-    <input type="text"      name="surname"  placeholder="Surname"/>
-    <input type="text"      name="ssn"      placeholder="Social Security Number"/>
-    <input type="text"      name="email"    placeholder="Email"/>
-    <input type="text"      name="username" placeholder="Username"/>
-    <input type="password"  name="password" placeholder="Password"/>
-    <button id="reg">LOGIN</button>
-  </form>
-</div>
-<script>
-    var socket = io();
-    $('#reg').on('click', function (evt) {
-      evt.preventDefault();
-      console.log('Websocket -> Gateway (Register)');
-      var form_data = $('register').serializeArray();
-      socket.emit('APPLICANT::REGISTER', form_data, function(reply) {
-			  console.log(reply);
-			});
-      return false;
-    });
-  </script>
+    <div class="form">
+        <form id="register" class="loginForm" method="POST">
+            <input type="text"      name="name"     placeholder="Name"/>
+            <input type="text"      name="surname"  placeholder="Surname"/>
+            <input type="text"      name="ssn"      placeholder="Social Security Number"/>
+            <input type="text"      name="email"    placeholder="Email"/>
+            <input type="text"      name="username" placeholder="Username"/>
+            <input type="password"  name="password" placeholder="Password"/>
+            <button id="reg">LOGIN</button>
+        </form>
+    </div>
+    <script>
+        var socket = io();
+        $('#reg').on('click', function (evt) {
+            evt.preventDefault();
+            console.log('Websocket -> Gateway (Register)');
+            var form_data = $('register').serializeArray();
+            socket.emit('APPLICANT::REGISTER', form_data, function(reply) {
+                  console.log(reply);
+            });
+            return false;
+        });
+    </script>
 {% endblock %}
