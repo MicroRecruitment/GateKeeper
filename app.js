@@ -22,17 +22,8 @@ nunjucks.configure('./public/views', {
 })
 
 // Routes
-app.get('/register', (req, res, next) =>{
-  res.render('register.njk')
-})
-
-app.get('/home', (req, res, next) =>{
-  res.render('home.njk')
-})
-
-app.use((req, res, next) =>{
-  res.render('index.njk')
-})
+const router = require('./routing/router')
+app.use('/', router);
 
 srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
