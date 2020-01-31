@@ -2,10 +2,11 @@
 const rmq = require('./MQ/AMQP.js');
 const model = require('./model.js');
 const uuidv4 = require('uuid/v4');
+const ENV = require('./env.json');
 
 /* Queues to send requests to. */
-const APP_QUEUE = 'applicant_queue_linus';
-const ADMIN_QUEUE = 'admin_queue';
+const APP_QUEUE = ENV.queues.APP_QUEUE;
+const ADMIN_QUEUE = ENV.queues.ADMIN_QUEUE;
 
 class Controller {
   constructor(socket) {
