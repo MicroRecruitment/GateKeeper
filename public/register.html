@@ -38,7 +38,9 @@
       evt.preventDefault();
       console.log('Websocket -> Gateway (Register)');
       var form_data = $('register').serializeArray();
-      socket.emit('APPLICANT::REGISTER', form_data);
+      socket.emit('APPLICANT::REGISTER', form_data, function(data) {
+				console.log(data);
+			});
       return false;
     });
   </script>
