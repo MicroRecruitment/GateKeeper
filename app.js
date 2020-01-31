@@ -26,6 +26,10 @@ app.get('/register', (req, res, next) =>{
   res.render('register.njk')
 })
 
+app.get('/home', (req, res, next) =>{
+  res.render('home.njk')
+})
+
 app.use((req, res, next) =>{
   res.render('index.njk')
 })

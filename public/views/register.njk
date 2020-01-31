@@ -55,19 +55,22 @@
     <script>
         var socket = io();
         $('form#register').on('submit', function (evt) {
-            evt.preventDefault();
-            console.log('Websocket -> Gateway (Register)');
+          evt.preventDefault();
+          console.log('Websocket -> Gateway (Register)');
 
-            var formData = new FormData(document.getElementById("register"));
-            var object = {};
-            formData.forEach((value, key) => {object[key] = value});
+          var formData = new FormData(document.getElementById("register"));
+          var object = {};
+          formData.forEach((value, key) => {object[key] = value});
 
-            console.log(object);
+          console.log(object);
 
-            socket.emit('APPLICANT::REGISTER', object, function(reply) {
-                  console.log(reply);
-            });
-            return false;
+          socket.emit('APPLICANT::REGISTER', object, function(reply) {
+            console.log(reply);
+            if (reply.status) {
+              window.location = '/home';
+            }
+          });
+          return false;
         });
     </script>
 {% endblock %}
