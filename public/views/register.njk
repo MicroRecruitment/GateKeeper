@@ -9,6 +9,7 @@
                 placeholder="Forename"
                 pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
                 required
+                value="Test"
                 />
             <input
                 type="text"
@@ -16,6 +17,7 @@
                 placeholder="Surname"
                 pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
                 required
+                value="Testsson"
                 />
             <input
                 type="text"
@@ -23,12 +25,14 @@
                 placeholder="Social Security Number"
                 pattern="^\d{6,8}[-|(\s)]{0,1}\d{4}$"
                 required
+                value="20200120-1234"
                 />
             <input
                 type="text"
                 name="email"
                 placeholder="Email"
                 required
+                value="test@domain.com"
                 />
             <input
                 type="text"
@@ -36,12 +40,14 @@
                 placeholder="Username"
                 pattern="^[a-zA-ZåäöÅÄÖ]{1,255}$"
                 required
+                value="test"
                 />
             <input
                 type="password"
                 name="password"
                 placeholder="Password"
                 required
+                value="test"
                 />
             <button id="reg">REGISTER</button>
         </form>
@@ -51,10 +57,14 @@
         $('form#register').on('submit', function (evt) {
             evt.preventDefault();
             console.log('Websocket -> Gateway (Register)');
-            var form_data = $('#register').serializeArray();
-            console.log(form_data);
-            return;
-            socket.emit('APPLICANT::REGISTER', form_data, function(reply) {
+
+            var formData = new FormData(document.getElementById("register"));
+            var object = {};
+            formData.forEach((value, key) => {object[key] = value});
+
+            console.log(object);
+
+            socket.emit('APPLICANT::REGISTER', object, function(reply) {
                   console.log(reply);
             });
             return false;
