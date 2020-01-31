@@ -2,32 +2,34 @@
 const express = require('express');
 const io = require('socket.io');
 const http = require('http');
-
 const ctrl = require('./controller.js');
+
+/* Constants */
+const PORT = 3000;
 
 var app = express();
 var srv = http.createServer(app);
 var socket = io(srv);
-const PORT = Math.round(Math.random() * 40000);
 
-app.use(express.static('./public'));
+/* Controller unit */
 var controller = new ctrl();
 
-srv.listen(PORT, function(){
+app.use(express.static('./public'));
+
+srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
 });
 
+/* Setup Socket.io events. */
 socket.on('connection', function(client) {
-  client.on('APPLICANT::COMPLETE', function(data) {
-    controller.Applicant(data);
+	console.log('Connected Client id: ' + client.id);
+	/* Client completed registration. */
+  client.on('APPLICANT::REGISTER', function(registration_data) {
+    console.log('Gateway (Websocket Event)');
+    controller.Register(client.id, registration_data);
   });
 
-  client.on('ADMINISTRATOR::SET', function(percent) {
-  });
+  client.on('ADMINISTRATOR::SET', function(percent) {});
 
   client.on('disconnect', (reason) => console.log(reason));
 });
-
-setInterval(function() {
-  controller.Applicant(10);
-}, 1000);

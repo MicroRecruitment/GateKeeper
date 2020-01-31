@@ -13,12 +13,23 @@ class AMQP {
     open.then(this.Setup.bind(this));
   }
 
+ /*
+	* Setup RabbitMQ cloud connection.
+	* @author: Linus Berg
+	* @param {obj} connection object from RabbitMQ.
+	*/
   async Setup(conn) {
     this.send_ = await conn.createChannel();
     var ch = await conn.createChannel();
     this.Consumer(ch);
   }
 
+ /*
+	* Send message to RabbitMQ cloud channel.
+	* @author: Linus Berg
+	* @param {string} Queue name to send to.
+	* @param {obj} Data frame.
+	*/
   async Send(queue, msg) {
     /* If a request has been made, loop until these are set. */
     while (!this.send_ || this.consume_queue_ == '');
@@ -32,6 +43,11 @@ class AMQP {
     return true;
   }
 
+ /*
+	* Setup consumer channel.
+	* @author: Linus Berg
+	* @param {ch} RabbitMQ channel.
+	*/
   async Consumer(ch) {
     /* Requested queue name. Create if not exists, if null random consumption */
     ch.assertQueue(this.req_queue, {
