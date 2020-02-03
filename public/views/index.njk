@@ -2,11 +2,35 @@
 
 {% block content %}
 <div class="form">
-    <form class="loginForm" method="POST">
+    <form id="login" class="loginForm" method="POST">
         <input type="text"      name="username" placeholder="Username"/>
         <input type="password"  name="password" placeholder="Password"/>
-        <button>LOGIN</button>
+        <input type="submit" value="LOGIN" />
         <p class="message">Not registered? <a href="register">Create an account</a></p>
     </form>
 </div>
+<script>
+    var socket = io();
+
+    $('form#login').on('submit', function (evt) {
+        evt.preventDefault();
+        console.log('Websocket -> Gateway (Login)');
+
+        var formData = new FormData(document.getElementById("login"));
+        var object = {};
+        formData.forEach((value, key) => {
+            object[key] = value
+        });
+
+        console.log(object);
+
+        socket.emit('AUTH::LOGIN', object, function (reply) {
+            console.log(reply);
+            if (reply.status) {
+                window.location = '/home';
+            }
+        });
+        return false;
+    });
+</script>
 {% endblock %}

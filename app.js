@@ -39,6 +39,12 @@ socket.on('connection', function(client) {
     controller.Register(registration_data, cb);
   });
 
+  /* Client completed login. */
+  client.on('AUTH::LOGIN', function(login_data, cb) {
+    console.log('Gateway (Websocket Event)');
+    controller.Login(login_data, cb);
+  });
+
   client.on('ADMINISTRATOR::SET', function(percent) {});
 
   client.on('disconnect', (reason) => console.log(reason));
