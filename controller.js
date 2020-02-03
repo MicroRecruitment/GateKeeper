@@ -68,11 +68,14 @@ class Controller {
 
 		this.ongoing_[call_id] = client_cb;
 
-    this.mq_.Send(AUTH_QUEUE, {
-      call: 'login',
-			call_id: call_id,
-      data: login_data
-    });
+		var metadata = {
+		  call: 'login',
+      call_id: call_id
+    }
+
+    var response = await this.mq_.Send(AUTH_QUEUE, metadata, login_data);
+
+    console.log(response);
   }
 
 }
