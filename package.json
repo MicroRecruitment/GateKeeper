@@ -5,6 +5,7 @@
   "dependencies": {
     "amqplib": "^0.5.5",
     "express": "^4.17.1",
+    "express-sessions": "^1.0.6",
     "nunjucks": "*",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
