@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="form">
-    <form class="loginForm" method="POST">
+    <form id="login" class="loginForm" method="POST" action="">
+        <span id="formError" class="error"></span>
         <input
             type="text"
             name="username"
@@ -18,8 +19,36 @@
             required
             value="test"
         />
-        <button>LOGIN</button>
+        <input type="submit" value="LOGIN" />
         <p class="message">Not registered? <a href="register">Create an account</a></p>
     </form>
 </div>
+<script>
+
+    $('form#login').on('submit', function (evt) {
+        evt.preventDefault();
+        console.log('Websocket -> Gateway (Login)');
+
+        let formData = new FormData(document.getElementById("login"));
+        var object = {};
+        formData.forEach((value, key) => {
+            object[key] = value
+        });
+        //console.log(object);
+
+        let stringFormData = 'ajax=true&'+$(this).serialize() ;
+        console.log(stringFormData);
+
+        $.post($(this).attr("action"), stringFormData, (data) => {
+            console.log("Login success: " + data);
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+        }).fail(() => {
+            $('#formError').html('Invalid username or password');
+        });
+
+        return false;
+    });
+</script>
 {% endblock %}

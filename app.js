@@ -3,28 +3,48 @@ const express = require('express');
 const nunjucks  = require('nunjucks');
 const io = require('socket.io');
 const http = require('http');
-const ctrl = require('./controller.js');
+const ctrl = require('./controller');
+const passport = require('passport');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const SQLiteStore = require('connect-sqlite3')(session);
 
 /* Constants */
 const PORT = 8081;
 
-var app = express();
-var srv = http.createServer(app);
-var socket = io(srv);
+/* Routes */
+const routes = require('./routes/');
+
+const app = express();
+const srv = http.createServer(app);
+const socket = io(srv);
 
 /* Controller unit */
-var controller = new ctrl(socket);
+const controller = new ctrl(socket);
 
-app.use(express.static('./public'));
+/* Application configuration */
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(session({
+  store: new SQLiteStore({}),
+  secret: 'iv1201',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize({}));
+app.use(passport.session({}));
+app.use('/', routes(app, passport));
 
-nunjucks.configure('./public/views', {
+/* Passport */
+require('./config/passport')(passport, controller);
+
+/* Nunjucks Templates setup */
+nunjucks.configure('public/views', {
   express: app
-})
+});
 
-// Routes
-const router = require('./routing/router')
-app.use('/', router);
-
+/* Start server */
 srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
 });
