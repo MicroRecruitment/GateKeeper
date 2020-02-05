@@ -25,6 +25,7 @@ class Controller {
 	*/
   Process(frame) {
 		var call_id = frame.metadata.call_id;
+		console.log('Gateway Controller (Process)');
 		console.log(frame);
 		console.log(this.ongoing_);
 		/* Client callback, tell client what happened. */
@@ -73,9 +74,7 @@ class Controller {
       call_id: call_id
     }
 
-    var response = await this.mq_.Send(AUTH_QUEUE, metadata, login_data);
-
-    console.log(response);
+    this.mq_.Send(AUTH_QUEUE, metadata, login_data);
   }
 
 }
