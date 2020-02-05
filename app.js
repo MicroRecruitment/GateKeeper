@@ -31,7 +31,7 @@ app.use(session({
   secret: 'iv1201',
   resave: false,
   saveUninitialized: false
-}););
+}));
 app.use(passport.initialize({}));
 app.use(passport.session({}));
 app.use('/', routes(app, passport));
@@ -42,7 +42,7 @@ require('./config/passport')(passport, controller);
 /* Nunjucks Templates setup */
 nunjucks.configure('public/views', {
   express: app
-})
+});
 
 /* Start server */
 srv.listen(PORT, function() {

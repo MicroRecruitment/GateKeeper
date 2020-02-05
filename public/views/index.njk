@@ -3,6 +3,7 @@
 {% block content %}
 <div class="form">
     <form id="login" class="loginForm" method="POST" action="">
+        <span id="formError" class="error"></span>
         <input type="text"      name="username" placeholder="Username"/>
         <input type="password"  name="password" placeholder="Password"/>
         <input type="submit" value="LOGIN" />
@@ -26,13 +27,12 @@
         console.log(stringFormData);
 
         $.post($(this).attr("action"), stringFormData, (data) => {
+            console.log("Login success: " + data);
             if (data.redirect) {
                 window.location.href = data.redirect;
             }
-            console.log("Login success: " + data);
-        }).fail((data) => {
-            console.log("Login failed:");
-            console.log(data);
+        }).fail(() => {
+            $('#formError').html('Invalid username or password');
         });
 
         return false;

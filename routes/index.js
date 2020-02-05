@@ -1,3 +1,5 @@
+const auth = require('./auth');
+
 module.exports = function (app, passport) {
   const router = require('express').Router();
   router.get('/',
@@ -11,21 +13,20 @@ module.exports = function (app, passport) {
     }
   );
   router.get('/home',
+    auth.required,
     (req, res) => {
-      console.log(req.session);
-      res.send(req.user);
+      res.render('home.njk', {user: req.user});
     }
   );
   router.post('/',
-    passport.authenticate(
-      'local'
-    ),
+    passport.authenticate('local'),
     (req, res) => {
       if (req.body.ajax) {
-        res.send('login success');
+        res.json({ redirect: '/home' });
       }
       else res.render('home.njk');
     }
   );
+
   return router;
 };
