@@ -1,9 +1,10 @@
 {% extends './layout.njk' %}
 
 {% block content %}
-<div class="form">
-    <form class="loginForm" method="POST">
+<div class="divForm">
+    <form method="POST">
         <input
+            class="logReg"
             type="text"
             name="username"
             placeholder="Username"
@@ -12,13 +13,14 @@
             value="test"
         />
         <input
+            class="logReg"
             type="password"
             name="password"
             placeholder="Password"
             required
             value="test"
         />
-        <button>LOGIN</button>
+        <button class="logReg">LOGIN</button>
         <p class="message">Not registered? <a href="register">Create an account</a></p>
     </form>
 </div>

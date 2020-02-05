@@ -1,0 +1,49 @@
+{% extends './layout.njk' %}
+
+{% block content %}
+<div class="divForm">
+  <h1 class="headForm">To apply for a job, fill the form</h1>
+  <!--form method=""-->
+    <select class="apply" id="#" required>
+      <option value="exp1">exp1</option>
+      <option value="exp2">exp2</option>
+      <option value="exp3">exp3</option>
+      <option value="exp4">exp4</option>
+    </select>
+    <input
+        class="apply"
+        type="text"
+        name="experience"
+        id="#"
+        placeholder="Years of experience"
+        required
+    />
+    <button class="another">+</button>
+<!--Some sort of button that adds one more dropdown menu with text area to
+    enter input for years of experience
+      -------------------------------->
+    <input
+        class="apply"
+        type="text"
+        name="fromDate"
+        id="#"
+        placeholder="Date available from"
+        required
+    />
+    <input
+        class="apply"
+        type="text"
+        name="toDate"
+        id="#"
+        placeholder="Date available to"
+        required
+    />
+    <button class="another">+</button>
+    <!-- ------------------------------
+Some sort of button that adds one more fields for entering available periods
+       -------------------------------->
+  <!--/form-->
+  <button class="logReg">Done</button>
+</div>
+
+{% endblock %}

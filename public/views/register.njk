@@ -1,9 +1,10 @@
 {% extends './layout.njk' %}
 
 {% block content %}
-    <div class="form">
+    <div class="divForm">
         <form id="register" class="loginForm" method="POST">
             <input
+                class="logReg"
                 type="text"
                 name="name"
                 placeholder="Forename"
@@ -12,6 +13,7 @@
                 value="Test"
                 />
             <input
+                class="logReg"
                 type="text"
                 name="surname"
                 placeholder="Surname"
@@ -20,6 +22,7 @@
                 value="Testsson"
                 />
             <input
+                class="logReg"
                 type="text"
                 name="ssn"
                 placeholder="Social Security Number"
@@ -28,6 +31,7 @@
                 value="20200120-1234"
                 />
             <input
+                class="logReg"
                 type="text"
                 name="email"
                 placeholder="Email"
@@ -35,6 +39,7 @@
                 value="test@domain.com"
                 />
             <input
+                class="logReg"
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -43,13 +48,14 @@
                 value="test"
                 />
             <input
+                class="logReg"
                 type="password"
                 name="password"
                 placeholder="Password"
                 required
                 value="test"
                 />
-            <button id="reg">REGISTER</button>
+            <button class="logReg" id="reg">REGISTER</button>
         </form>
     </div>
     <script>

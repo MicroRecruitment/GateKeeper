@@ -25,6 +25,9 @@ nunjucks.configure('./public/views', {
 app.get('/register', (req, res, next) =>{
   res.render('register.njk')
 })
+app.get('/apply', (req, res, next) =>{
+  res.render('apply.njk')
+})
 
 app.use((req, res, next) =>{
   res.render('index.njk')
