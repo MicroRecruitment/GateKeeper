@@ -3,10 +3,16 @@ const express = require('express');
 const nunjucks  = require('nunjucks');
 const io = require('socket.io');
 const http = require('http');
-const ctrl = require('./controller.js');
+const ctrl = require('./controller');
+const passport = require('passport');
+const session = require('express-session');
+const bodyParser = require('body-parser');
 
 /* Constants */
 const PORT = 8081;
+
+/* Routes */
+const routes = require('./routes/');
 
 var app = express();
 var srv = http.createServer(app);
@@ -15,16 +21,24 @@ var socket = io(srv);
 /* Controller unit */
 var controller = new ctrl(socket);
 
-app.use(express.static('./public'));
+/* Application configuration */
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(session({ secret: "iv1201" }));
+app.use(passport.initialize({}));
+app.use(passport.session({}));
+app.use('/', routes(app, passport));
 
-nunjucks.configure('./public/views', {
+/* Passport */
+require('./config/passport')(passport, controller);
+
+/* Nunjucks Templates setup */
+nunjucks.configure('public/views', {
   express: app
 })
 
-// Routes
-const router = require('./routing/router')
-app.use('/', router);
-
+/* Start server */
 srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
 });
@@ -41,7 +55,33 @@ socket.on('connection', function(client) {
 
   /* Client completed login. */
   client.on('AUTH::LOGIN', function(login_data, cb) {
-    console.log('Gateway (Websocket Event)');
+    console.log('Gateway (Websocket Event: LOGIN)');
+
+    let callback = (data) => {
+      console.log('Gateway (Websocket Event: LOGIN) Response');
+      console.log(data);
+      client.request.login(data.user, () => {
+        cb({
+          status: true
+        });
+      });
+    };
+
+    controller.Login(login_data, callback);
+
+    return;
+
+    let req = {
+      body: login_data
+    };
+    let res = {
+      setHeader: () => {},
+      end: () => {}
+    };
+
+    passport.authenticate('local', null, null)(req, res, null);
+
+    // console.log(client.request.session);
     controller.Login(login_data, cb);
   });
 
