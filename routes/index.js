@@ -12,20 +12,19 @@ module.exports = function (app, passport) {
   );
   router.get('/home',
     (req, res) => {
-      res.render('home.njk')
+      console.log(req.session);
+      res.send(req.user);
     }
   );
   router.post('/',
     passport.authenticate(
-      'local',
-      {
-        successRedirect: '/home',
-        failureRedirect: '/'
-      }
+      'local'
     ),
     (req, res) => {
-      console.log('login success');
-      res.render('home.njk');
+      if (req.body.ajax) {
+        res.send('login success');
+      }
+      else res.render('home.njk');
     }
   );
   return router;

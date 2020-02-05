@@ -22,21 +22,17 @@ const socket = io(srv);
 /* Controller unit */
 const controller = new ctrl(socket);
 
-const sessionMiddleware = session({
-  store: new SQLiteStore({}),
-  secret: 'iv1201',
-  resave: false,
-  saveUninitialized: false
-});
-
-const passportMiddleware = passport.initialize({});
-
 /* Application configuration */
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(sessionMiddleware);
-app.use(passportMiddleware);
+app.use(session({
+  store: new SQLiteStore({}),
+  secret: 'iv1201',
+  resave: false,
+  saveUninitialized: false
+}););
+app.use(passport.initialize({}));
 app.use(passport.session({}));
 app.use('/', routes(app, passport));
 
@@ -53,13 +49,6 @@ srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
 });
 
-socket.use(function(client, next) {
-  sessionMiddleware(client.request, client.request.res, next);
-});
-socket.use((client, next) => {
-  passportMiddleware(client.request, client.request.res, next);
-});
-
 /* Setup Socket.io events. */
 socket.on('connection', function(client) {
 	console.log('Connected Client id: ' + client.id);
@@ -68,30 +57,6 @@ socket.on('connection', function(client) {
   client.on('APPLICANT::REGISTER', function(registration_data, cb) {
     console.log('Gateway (Websocket Event)');
     controller.Register(registration_data, cb);
-  });
-
-  /* Client completed login. */
-  client.on('AUTH::LOGIN', function(login_data, cb) {
-    console.log('Gateway (Websocket Event: LOGIN)');
-
-    let callback = (data) => {
-      console.log('Gateway (Websocket Event: LOGIN) Response');
-      console.log(data);
-      if (data.status) {
-        client.request.login(data.user,{}, () => {
-          cb({
-            status: true
-          });
-        });
-      }
-      else {
-        cb({
-          status: false
-        });
-      }
-    };
-
-    controller.Login(login_data, callback);
   });
 
   client.on('ADMINISTRATOR::SET', function(percent) {});
