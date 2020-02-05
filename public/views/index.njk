@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="form">
-    <form id="login" class="loginForm" method="POST">
+    <form id="login" class="loginForm" method="POST" action="">
         <input type="text"      name="username" placeholder="Username"/>
         <input type="password"  name="password" placeholder="Password"/>
         <input type="submit" value="LOGIN" />
@@ -16,13 +16,26 @@
         evt.preventDefault();
         console.log('Websocket -> Gateway (Login)');
 
-        var formData = new FormData(document.getElementById("login"));
+        let formData = new FormData(document.getElementById("login"));
         var object = {};
         formData.forEach((value, key) => {
             object[key] = value
         });
+        //console.log(object);
 
-        console.log(object);
+        /*
+        let stringFormData = $(this).serialize() ;
+        console.log(stringFormData);
+
+        $.post($(this).attr("action"), stringFormData, (data) => {
+            console.log("Login success: " + data);
+        }).done((data) => {
+            console.log("Login success: " + data);
+        }).fail((data) => {
+            console.log("Login failed:");
+            console.log(data);
+        })
+        */
 
         socket.emit('AUTH::LOGIN', object, function (reply) {
             console.log(reply);
@@ -30,6 +43,7 @@
                 window.location = '/home';
             }
         });
+
         return false;
     });
 </script>
