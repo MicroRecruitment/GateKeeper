@@ -7,6 +7,7 @@ const ctrl = require('./controller');
 const passport = require('passport');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const SQLiteStore = require('connect-sqlite3')(session);
 
 /* Constants */
 const PORT = 8081;
@@ -14,19 +15,28 @@ const PORT = 8081;
 /* Routes */
 const routes = require('./routes/');
 
-var app = express();
-var srv = http.createServer(app);
-var socket = io(srv);
+const app = express();
+const srv = http.createServer(app);
+const socket = io(srv);
 
 /* Controller unit */
-var controller = new ctrl(socket);
+const controller = new ctrl(socket);
+
+const sessionMiddleware = session({
+  store: new SQLiteStore({}),
+  secret: 'iv1201',
+  resave: false,
+  saveUninitialized: false
+});
+
+const passportMiddleware = passport.initialize({});
 
 /* Application configuration */
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(session({ secret: "iv1201" }));
-app.use(passport.initialize({}));
+app.use(sessionMiddleware);
+app.use(passportMiddleware);
 app.use(passport.session({}));
 app.use('/', routes(app, passport));
 
@@ -41,6 +51,13 @@ nunjucks.configure('public/views', {
 /* Start server */
 srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
+});
+
+socket.use(function(client, next) {
+  sessionMiddleware(client.request, client.request.res, next);
+});
+socket.use((client, next) => {
+  passportMiddleware(client.request, client.request.res, next);
 });
 
 /* Setup Socket.io events. */
@@ -60,29 +77,21 @@ socket.on('connection', function(client) {
     let callback = (data) => {
       console.log('Gateway (Websocket Event: LOGIN) Response');
       console.log(data);
-      client.request.login(data.user, () => {
-        cb({
-          status: true
+      if (data.status) {
+        client.request.login(data.user,{}, () => {
+          cb({
+            status: true
+          });
         });
-      });
+      }
+      else {
+        cb({
+          status: false
+        });
+      }
     };
 
     controller.Login(login_data, callback);
-
-    return;
-
-    let req = {
-      body: login_data
-    };
-    let res = {
-      setHeader: () => {},
-      end: () => {}
-    };
-
-    passport.authenticate('local', null, null)(req, res, null);
-
-    // console.log(client.request.session);
-    controller.Login(login_data, cb);
   });
 
   client.on('ADMINISTRATOR::SET', function(percent) {});

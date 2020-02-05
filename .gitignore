@@ -108,3 +108,6 @@ dist
 
 # ENV
 env.json
+
+#Session store
+sessions

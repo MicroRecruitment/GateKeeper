@@ -5,6 +5,7 @@
   "dependencies": {
     "amqplib": "^0.5.5",
     "body-parser": "^1.19.0",
+    "connect-sqlite3": "^0.9.11",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "nunjucks": "*",
