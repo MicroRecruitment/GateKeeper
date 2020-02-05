@@ -24,6 +24,12 @@ router.get('/home', passport.authenticate('jwt', {session: false}),
   }
 );
 
+router.get('/apply',
+  (req, res) =>{
+    res.render('apply.njk')
+  }
+);
+
 /* Ajax login request to provide JWT. */
 router.post('/login', function (req, res, next) {
   /* Verify function */ 
