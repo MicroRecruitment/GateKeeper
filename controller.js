@@ -24,10 +24,8 @@ class Controller {
 	* @param {obj} Message object from RabbitMQ.
 	*/
   Process(frame) {
-		var call_id = frame.metadata.call_id;
+		let call_id = frame.metadata.call_id;
 		console.log('Gateway Controller (Process)');
-		console.log(frame);
-		console.log(this.ongoing_);
 		/* Client callback, tell client what happened. */
 		this.ongoing_[call_id]({
 			status: frame.content.status,
@@ -44,16 +42,16 @@ class Controller {
 	*/
   async Register(registration_data, client_cb) {
 		console.log('Gateway Controller (Register)');
-		var call_id = uuidv4();
+		let call_id = uuidv4();
 
 		this.ongoing_[call_id] = client_cb;
     
-    var metadata = {
+    let metadata = {
       call: 'register',
       call_id: call_id
     };
 
-    var content = registration_data;
+    let content = registration_data;
     this.mq_.Send(AUTH_QUEUE, metadata, content);
   }
  

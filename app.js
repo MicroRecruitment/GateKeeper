@@ -5,16 +5,11 @@ const io = require('socket.io');
 const http = require('http');
 const ctrl = require('./controller');
 const passport = require('passport');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const SQLiteStore = require('connect-sqlite3')(session);
 
 /* Constants */
 const PORT = 8081;
 
 /* Routes */
-const routes = require('./routes/');
-
 const app = express();
 const srv = http.createServer(app);
 const socket = io(srv);
@@ -22,22 +17,14 @@ const socket = io(srv);
 /* Controller unit */
 const controller = new ctrl(socket);
 
-/* Application configuration */
-app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(session({
-  store: new SQLiteStore({}),
-  secret: 'iv1201',
-  resave: false,
-  saveUninitialized: false
-}));
-app.use(passport.initialize({}));
-app.use(passport.session({}));
-app.use('/', routes(app, passport));
+/* Middleware */
+require('./config/middleware.js')(app);
+
+/* Routes */
+app.use('/', require('./routes/'));
 
 /* Passport */
-require('./config/passport')(passport, controller);
+require('./config/passport')(controller);
 
 /* Nunjucks Templates setup */
 nunjucks.configure('public/views', {

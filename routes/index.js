@@ -1,32 +1,63 @@
 const auth = require('./auth');
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
-module.exports = function (app, passport) {
-  const router = require('express').Router();
-  router.get('/',
-    (req, res) => {
-      res.render('index.njk')
+const JWT_SECRET = require('../env.json').JWT_SECRET;
+const router = require('express').Router();
+
+router.get('/',
+  (req, res) => {
+    res.render('index.njk')
+  }
+);
+
+router.get('/register',
+  (req, res) => {
+    res.render('register.njk')
+  }
+);
+
+/* Home AUTH: JWT */
+router.get('/home', passport.authenticate('jwt', {session: false}),
+  (req, res) => {
+    res.render('home.njk');
+  }
+);
+
+/* Ajax login request to provide JWT. */
+router.post('/login', function (req, res, next) {
+  /* Verify function */ 
+  let verify = function(error, user, info) {
+    console.log('--- Authenticating ---');
+    console.log('Result:', (user ? user : error));
+    
+    if (error || !user) {
+      res.status(400).json({ error });
     }
-  );
-  router.get('/register',
-    (req, res) => {
-      res.render('register.njk')
-    }
-  );
-  router.get('/home',
-    auth.required,
-    (req, res) => {
-      res.render('home.njk', {user: req.user});
-    }
-  );
-  router.post('/',
-    passport.authenticate('local'),
-    (req, res) => {
-      if (req.body.ajax) {
-        res.json({ redirect: '/home' });
+    
+    /* JWT payload */
+    const payload = {
+      username: user.username,
+      expires: Date.now() + 3000 * 60 * 60,
+    };
+
+    console.log('JWT payload:', payload);
+    
+    /* Assigns payload to req.user */
+    req.login(payload, {session: false}, (error) => {
+      if (error) {
+        console.log(error);
+        res.status(400).send({ error });
       }
-      else res.render('home.njk');
-    }
-  );
 
-  return router;
-};
+      const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
+
+      res.cookie('jwt', token, { httpOnly: false, secure: false });
+      res.status(200).send(payload);
+    });
+  }
+
+  passport.authenticate('login', {session: false}, verify)(req, res, next);
+});
+
+module.exports = router
