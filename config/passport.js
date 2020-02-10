@@ -33,7 +33,7 @@ module.exports = (controller) => {
         
         if (data.status) {
           console.log('Passport: login success');
-          done(null, data.result[0]);
+          done(null, data.result);
         } else {
           console.log('Passport: login failed');
           done(null, false, "Invalid credentials");
@@ -47,15 +47,12 @@ module.exports = (controller) => {
   passport.use('jwt',
     new JwtStrategy(opts, function(jwt_payload, done) {
       let callback = function(data) {
-        /* Valid JWT token. */
         if (data.status) {
           return done(null, data.result);
         } else {
           return done(null, false);
         }
       }
-      
-      /* TODO: Change this to UserExists */
-      controller.Login(jwt_payload, callback);
+      controller.UserExists(jwt_payload.username, callback);
   }));
 }

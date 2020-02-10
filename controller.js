@@ -74,6 +74,25 @@ class Controller {
 
     this.mq_.Send(AUTH_QUEUE, metadata, login_data);
   }
+  
+  /*
+	* Controller function for checking user existance.
+  * @queue: auth_queue
+	* @author: Linus Berg
+	* @param {string} username of user to check.
+	*/
+  async UserExists(username, client_cb) {
+		var call_id = uuidv4();
+
+		this.ongoing_[call_id] = client_cb;
+
+		var metadata = {
+		  call: 'user_exists',
+      call_id: call_id
+    }
+
+    this.mq_.Send(AUTH_QUEUE, metadata, username);
+  }
 
 }
 

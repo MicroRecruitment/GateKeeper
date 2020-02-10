@@ -28,25 +28,19 @@ router.get('/home', passport.authenticate('jwt', {session: false}),
 router.post('/login', function (req, res, next) {
   /* Verify function */ 
   let verify = function(error, user, info) {
-    console.log('--- Authenticating ---');
-    console.log('Result:', (user ? user : error));
-    
     if (error || !user) {
-      res.status(400).json({ error });
+      return res.status(400).json({ error });
     }
     
     /* JWT payload */
     const payload = {
-      username: user.username,
+      username: user.USERNAME,
       expires: Date.now() + 3000 * 60 * 60,
     };
-
-    console.log('JWT payload:', payload);
     
     /* Assigns payload to req.user */
     req.login(payload, {session: false}, (error) => {
       if (error) {
-        console.log(error);
         res.status(400).send({ error });
       }
 
