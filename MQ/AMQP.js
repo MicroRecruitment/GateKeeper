@@ -8,9 +8,15 @@ class AMQP {
       this.consume_queue_ = req_queue;
     }
     this.cb_ = processor;
-    
-    var open = amqp.connect(HOST);
-    open.then(this.Setup.bind(this));
+
+    this.ready_ = new Promise(function(resolve, reject) {
+      this.open = amqp.connect(HOST);
+      this.open.then(this.Setup.bind(this))
+               .then(function() {
+                 console.log('Setup done');
+                 resolve(true)
+               });
+    }.bind(this)); 
   }
 
  /*
@@ -19,9 +25,10 @@ class AMQP {
 	* @param {obj} connection object from RabbitMQ.
 	*/
   async Setup(conn) {
-    this.send_ = await conn.createChannel();
-    var ch = await conn.createChannel();
+    console.log('Setup started');
+    let ch = await conn.createChannel();
     this.Consumer(ch);
+    this.send_ = await conn.createChannel();
   }
 
  /*
@@ -32,15 +39,14 @@ class AMQP {
 	*/
   async Send(queue, metadata, data) {
     /* If a request has been made, loop until these are set. */
-    while (!this.send_ || this.consume_queue_ == '');
-
+    await this.ready_;
     metadata.reply = this.consume_queue_; 
     
     var frame = {
       metadata: metadata,
       content: data
     };
-
+    console.log(metadata);
     this.send_.sendToQueue(queue, Buffer.from(JSON.stringify(frame)));
     return true;
   }
