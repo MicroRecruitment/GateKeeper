@@ -1,8 +1,8 @@
 {% extends './layout.njk' %}
 
 {% block content %}
-<div class="divForm">
-  <form id="register" class="loginForm" method="POST">
+<div class="form">
+  <form id="register" class="loginForm" method="POST" action="/register">
     <input
         type="text"
         name="name"
@@ -55,25 +55,36 @@
 <script>
   $('form#register').on('submit', function (evt) {
     evt.preventDefault();
-    var formData = new FormData(document.getElementById("register"));
-    var object = {};
+    console.log('Websocket -> Gateway (Register)');
+
+    let formData = new FormData(document.getElementById("register"));
+    let object = {};
     formData.forEach((value, key) => {
       object[key] = value
     });
+    //console.log(object);
 
-    console.log(object);
-
-    let stringFormData = 'ajax=true&'+$(this).serialize() ;
+    let stringFormData = 'ajax=true&' + $(this).serialize();
     console.log(stringFormData);
 
-    $.post('/auth/register', stringFormData, (data) => {
-        console.log("Login success: " + data);
-        if (data.redirect) {
-            window.location.href = data.redirect;
-        }
-    }).fail(() => {
-        $('#formError').html('Invalid username or password');
+    $.post($(this).attr("action"), stringFormData, (data) => {
+      console.log("Register success: " + data);
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      }
+    }).fail((data) => {
+      console.log(data.responseJSON);
+      for (var property in data.responseJSON) {
+        const error = jQuery('<span>')
+          .addClass('error')
+          .text(data.responseJSON[property]);
+
+        $('form#register').children(`[name=${property}]`)
+          .addClass('error')
+          .after(error);
+      }
     });
+
     return false;
   });
 </script>

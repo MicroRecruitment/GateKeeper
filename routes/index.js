@@ -49,4 +49,11 @@ router.get('/admin',
   }
 );
 
+router.post('/register', (req, res) => {
+  res.status(400).send({
+    'name': 'error1',
+    'ssn': 'error2',
+  });
+});
+
 module.exports = router

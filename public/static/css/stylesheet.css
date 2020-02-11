@@ -76,3 +76,6 @@ button.another{
   text-align: center;
   font-size: 1em;
 }
+.form .error {
+  color: red;
+}
