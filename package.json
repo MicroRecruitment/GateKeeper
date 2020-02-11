@@ -10,6 +10,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "jsonwebtoken": "^8.5.1",
+    "node-input-validator": "^4.2.0",
     "nunjucks": "*",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

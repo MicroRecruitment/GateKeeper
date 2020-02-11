@@ -4,6 +4,7 @@ const passport = require('passport');
 
 const JWT_SECRET = require('../env.json').JWT_SECRET;
 const router = require('express').Router();
+const { Validator } = require('node-input-validator');
 
 router.get('/',
   (req, res) => {
@@ -55,9 +56,20 @@ router.post('/login', function (req, res, next) {
 });
 
 router.post('/register', (req, res) => {
-  res.status(400).send({
-    'name': 'error1',
-    'ssn': 'error2',
+  const validator = new Validator(req.body,
+    {
+      name: 'required|integer',
+      surname: 'required',
+      ssn: 'required',
+      email: 'required',
+      username: 'required',
+      password: 'required|email',
+    }
+  );
+  validator.check().then((matched) => {
+    if (!matched) {
+      res.status(422).send(validator.errors);
+    }
   });
 });
 
