@@ -77,7 +77,7 @@
       for (var property in data.responseJSON) {
         const error = jQuery('<span>')
           .addClass('error')
-          .text(data.responseJSON[property]);
+          .text(data.responseJSON[property]['message']);
 
         $('form#register').children(`[name=${property}]`)
           .addClass('error')
