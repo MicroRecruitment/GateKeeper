@@ -28,6 +28,12 @@ app.get('/register', (req, res, next) =>{
 app.get('/apply', (req, res, next) =>{
   res.render('apply.njk')
 })
+app.get('/present', (req, res, next) =>{
+  res.render('present.njk')
+})
+app.get('/listApplicants', (req, res, next) =>{
+  res.render('listApplicants.njk')
+})
 
 app.use((req, res, next) =>{
   res.render('index.njk')
