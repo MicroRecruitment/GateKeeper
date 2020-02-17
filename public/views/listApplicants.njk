@@ -40,7 +40,18 @@
       <option value="exp5">exp4</option>
     </select>
   </form>
-  <button class="logReg">Done</button>
+  <button id="getApplications" class="logReg">Done</button>
 </div>
+
+<script>
+  $("#getApplications").on('click', function (event) {
+    event.preventDefault();
+    $.getJSON("/GetAllApplicants", function(result){
+      $.each(result, function(i, field){
+      $("div").append(field + " ");
+      });
+    });
+  });
+</script>
 
 {% endblock %}
