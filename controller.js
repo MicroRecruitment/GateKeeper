@@ -4,9 +4,8 @@ const model = require('./model.js');
 const uuidv4 = require('uuid/v4');
 
 class Controller {
-  constructor(socket) {
+  constructor() {
     this.mq_ = new rmq(null, this.Process.bind(this));
-		this.socket_ = socket;
 
 		this.callbacks_ = {};
     require('./controllers/auth.js')(this); 

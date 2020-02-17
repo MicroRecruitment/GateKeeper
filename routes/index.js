@@ -35,8 +35,17 @@ router.get('/present',
   }
 );
 
-router.get('/listApplicants', (req, res) => {
-    res.render('listApplicants.njk')
+router.get('/admin',
+  passport.authenticate('jwt', {
+    session: false,
+    failureRedirect: '/login'
+  }),
+  (req, res) => {
+    if (req.user.ROLE_ID == '1') {
+      res.render('listApplicants.njk')
+    } else {
+      res.send('Permission denied');
+    }
   }
 );
 

@@ -20,6 +20,19 @@ module.exports = (ctrl) => {
     this.mq_.Send(APP_QUEUE, metadata, content);
   }
 
+  ctrl.Apply = async function(apply_data, cb) {
+    let metadata = {
+      call: 'Apply',
+      call_id: this.AddCallback(cb)
+    };
+    let content = {
+      id: apply.id,
+      state: apply.state
+    };
+    this.mq_.Send(APP_QUEUE, metadata, content);
+
+  }
+
   ctrl.SetApplicant = async function(applicant_data, cb) {
     let metadata = {
       call: 'SetApplicant',

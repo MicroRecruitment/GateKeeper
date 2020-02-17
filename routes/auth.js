@@ -6,12 +6,14 @@ function CreateRoute(ctrl) {
   const router = require('express').Router();
   
   /* Register */
-  router.get('/register',
+  router.post('/register',
     (req, res) => {
       let cb = function(result) {
-        res.send(result);
+        res.json({
+          redirect: '/'
+        });
       }
-      ctrl.Register(registration_data, cb);
+      ctrl.Register(req.body, cb);
   });
 
   /* Ajax login request to provide JWT. */

@@ -10,11 +10,19 @@ function CreateRoute(ctrl) {
     (req, res) => {
       if (req.user.ROLE_ID == '1') {
         ctrl.GetAllApplicants(x => {
-          res.send(x);
+          res.json(x);
         });
       } else {
         res.send('Permission denied');
       }
+  });
+  
+  router.get('/Apply/',
+    passport.authenticate('jwt', {session: false}),
+    (req, res) => {
+      ctrl.Apply(req.body, x => {
+        res.send(x);
+      });
   });
   
   router.get('/SetApplicant/',

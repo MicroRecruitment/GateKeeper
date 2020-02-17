@@ -66,7 +66,7 @@
     let stringFormData = 'ajax=true&'+$(this).serialize() ;
     console.log(stringFormData);
 
-    $.post($(this).attr("action"), stringFormData, (data) => {
+    $.post('/auth/register', stringFormData, (data) => {
         console.log("Login success: " + data);
         if (data.redirect) {
             window.location.href = data.redirect;

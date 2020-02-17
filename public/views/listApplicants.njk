@@ -46,7 +46,8 @@
 <script>
   $("#getApplications").on('click', function (event) {
     event.preventDefault();
-    $.getJSON("/GetAllApplicants", function(result){
+    $.getJSON("/api/GetAllApplicants", function(result){
+      console.log(result);
       $.each(result, function(i, field){
       $("div").append(field + " ");
       });
