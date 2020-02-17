@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="form">
-    <form id="login" class="loginForm" method="POST" action="/login">
+    <form id="login" class="loginForm" method="POST" action="/auth/login">
         <span id="formError" class="error"></span>
         <input
             type="text"
@@ -27,8 +27,6 @@
 
     $('form#login').on('submit', function (evt) {
         evt.preventDefault();
-        console.log('Websocket -> Gateway (Login)');
-
         let formData = new FormData(document.getElementById("login"));
         var object = {};
         formData.forEach((value, key) => {

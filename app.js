@@ -22,6 +22,8 @@ require('./config/middleware.js')(app);
 
 /* Routes */
 app.use('/', require('./routes/'));
+app.use('/auth/', require('./routes/auth')(controller));
+app.use('/api/', require('./routes/api')(controller));
 
 /* Passport */
 require('./config/passport')(controller);
@@ -43,7 +45,6 @@ socket.on('connection', function(client) {
 	/* Client completed registration. */
   client.on('APPLICANT::REGISTER', function(registration_data, cb) {
     console.log('Gateway (Websocket Event)');
-    controller.Register(registration_data, cb);
   });
 
   client.on('ADMINISTRATOR::SET', function(percent) {});

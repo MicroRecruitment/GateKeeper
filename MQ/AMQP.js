@@ -12,10 +12,7 @@ class AMQP {
     this.ready_ = new Promise(function(resolve, reject) {
       this.open = amqp.connect(HOST);
       this.open.then(this.Setup.bind(this))
-               .then(function() {
-                 console.log('Setup done');
-                 resolve(true)
-               });
+               .then(() => resolve(true));
     }.bind(this)); 
   }
 
@@ -25,7 +22,6 @@ class AMQP {
 	* @param {obj} connection object from RabbitMQ.
 	*/
   async Setup(conn) {
-    console.log('Setup started');
     let ch = await conn.createChannel();
     this.Consumer(ch);
     this.send_ = await conn.createChannel();

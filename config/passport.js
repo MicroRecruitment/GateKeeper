@@ -20,26 +20,18 @@ module.exports = (controller) => {
   /* Local strategy */
   passport.use('login',
     new LocalStrategy((username, password, done) => {
-      console.log('Gateway Login LocalStrategy');
-      
       let login_data = {
         username: username,
         password: password
       };
 
       let callback = (data) => {
-        console.log('Gateway <- Auth response:');
-        console.log(data);
-        
         if (data.status) {
-          console.log('Passport: login success');
           done(null, data.result);
         } else {
-          console.log('Passport: login failed');
           done(null, false, "Invalid credentials");
         }
       };
-
       controller.Login(login_data, callback);
   }));
   
@@ -53,6 +45,6 @@ module.exports = (controller) => {
           return done(null, false);
         }
       }
-      controller.UserExists(jwt_payload.username, callback);
+      controller.GetUser(jwt_payload.username, callback);
   }));
 }

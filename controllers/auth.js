@@ -3,18 +3,13 @@ const ENV = require('../env.json');
 const AUTH_QUEUE = ENV.queues.AUTH_QUEUE;
 
 module.exports = (ctrl) => {
-  ctrl.Register = async function(registration_data, client_cb) {
-		let call_id = uuidv4();
-
-		this.ongoing_[call_id] = client_cb;
-    
+  ctrl.Register = async function(registration_data, cb) {
     let metadata = {
       call: 'register',
-      call_id: call_id
+      call_id: this.AddCallback(cb)
     };
 
-    let content = registration_data;
-    this.mq_.Send(AUTH_QUEUE, metadata, content);
+    this.mq_.Send(AUTH_QUEUE, metadata, registration_data);
   }
   
   /*
@@ -23,15 +18,10 @@ module.exports = (ctrl) => {
 	* @author: Linus Berg
 	* @param {int} client_id Socket.io ID, for reply.
 	*/
-  ctrl.Login = async function(login_data, client_cb) {
-		console.log('Gateway Controller (Login)');
-		var call_id = uuidv4();
-
-		this.ongoing_[call_id] = client_cb;
-
+  ctrl.Login = async function(login_data, cb) {
 		var metadata = {
 		  call: 'login',
-      call_id: call_id
+      call_id: this.AddCallback(cb)
     }
 
     this.mq_.Send(AUTH_QUEUE, metadata, login_data);
@@ -43,14 +33,10 @@ module.exports = (ctrl) => {
 	* @author: Linus Berg
 	* @param {string} username of user to check.
 	*/
-  ctrl.UserExists = async function(username, client_cb) {
-		var call_id = uuidv4();
-
-		this.ongoing_[call_id] = client_cb;
-
+  ctrl.GetUser = async function(username, cb) {
 		var metadata = {
-		  call: 'user_exists',
-      call_id: call_id
+		  call: 'get_user',
+      call_id: this.AddCallback(cb)
     }
 
     this.mq_.Send(AUTH_QUEUE, metadata, username);
