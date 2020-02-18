@@ -19,9 +19,7 @@ const controller = new ctrl();
 require('./config/middleware.js')(app);
 
 /* Routes */
-app.use('/', require('./routes/'));
-app.use('/auth/', require('./routes/auth')(controller));
-app.use('/api/', require('./routes/api')(controller));
+app.use('/', require('./routes/')(controller));
 
 /* Passport */
 require('./config/passport')(controller);
