@@ -65,6 +65,7 @@
         $("#applicants_list").html('');
         $("#applicants").show();
         $.each(data.result, function(i, field) {
+          console.log(JSON.parse(field.AVAILABILITIES));
           const applicant = applicant_model.clone();
           $('#name', applicant).html(field.NAME + ' ' + field.SURNAME);
           $('#email', applicant).html(field.EMAIL);
