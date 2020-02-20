@@ -8,7 +8,9 @@ module.exports = (controller) => {
       failureRedirect: '/login'
     }),
     (req, res) => {
-      res.render('home.njk');
+      res.render('home.njk', {
+        user: req.user,
+      });
     }
   );
 
