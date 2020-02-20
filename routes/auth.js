@@ -39,7 +39,7 @@ function CreateRoute(ctrl) {
               });
             }
           };
-          controller.Register(req.body, callback);
+          ctrl.Register(req.body, callback);
         }
       });
     });
