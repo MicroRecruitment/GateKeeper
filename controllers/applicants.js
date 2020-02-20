@@ -26,7 +26,7 @@ module.exports = (ctrl) => {
       call_id: this.AddCallback(cb)
     };
     let content = {
-      id: apply.id,
+      id: apply.username,
       state: apply.state
     };
     this.mq_.Send(APP_QUEUE, metadata, content);
@@ -39,7 +39,7 @@ module.exports = (ctrl) => {
       call_id: this.AddCallback(cb)
     };
     let content = {
-      id: applicant_data.id,
+      username: applicant_data.username,
       state: applicant_data.state
     };
     this.mq_.Send(APP_QUEUE, metadata, content);

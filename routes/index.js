@@ -27,8 +27,16 @@ module.exports = (controller) => {
   );
 
   router.get('/apply',
+    passport.authenticate('jwt', {
+      session: false,
+      failureRedirect: '/login'
+    }),
     (req, res) => {
-      res.render('apply.njk')
+      if (req.user.ROLE_ID != '1') {
+        res.render('apply.njk');
+      } else {
+        res.redirect('/admin');
+      }
     }
   );
 
