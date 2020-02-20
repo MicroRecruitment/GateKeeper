@@ -41,16 +41,36 @@
     </select>
   </form>
   <button id="getApplications" class="logReg">Done</button>
+  <div id="applicants" style="display: none">
+    <h2>Applicants</h2>
+    <div id="applicants_list">
+
+    </div>
+  </div>
 </div>
 
 <script>
+  const applicant_model = jQuery('<div>').addClass('applicant');
+  applicant_model.append(jQuery('<span>').attr('id', 'name'));
+  applicant_model.append(jQuery('<span>').attr('id', 'email'));
+  applicant_model.append(jQuery('<button>').html('&#10003;'));
+  applicant_model.append(jQuery('<button>').html('X'));
+
   $("#getApplications").on('click', function (event) {
     event.preventDefault();
-    $.getJSON("/api/GetAllApplicants", function(result){
-      console.log(result);
-      $.each(result, function(i, field){
-      $("div").append(field + " ");
-      });
+    $.getJSON("/api/GetAllApplicants", function(data) {
+      console.log(data);
+      if (data.status) {
+        result_count = data.result.length;
+        $("#applicants_list").html('');
+        $("#applicants").show();
+        $.each(data.result, function(i, field) {
+          const applicant = applicant_model.clone();
+          $('#name', applicant).html(field.NAME + ' ' + field.SURNAME);
+          $('#email', applicant).html(field.EMAIL);
+          $("#applicants_list").append(applicant);
+        });
+      }
     });
   });
 </script>
