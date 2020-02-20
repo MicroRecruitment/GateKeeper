@@ -33,4 +33,3 @@ nunjucks.configure('public/views', {
 srv.listen(PORT, function () {
   console.log('Server started on *:' + PORT);
 });
-

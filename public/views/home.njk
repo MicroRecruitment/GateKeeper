@@ -6,4 +6,17 @@
         <p>Username: {{ user.USERNAME }}</p>
         <p>RoleID: {{ user.ROLE_ID }}</p>
     </div>
+    <div>
+      <button id="logout">Logout</button>
+    </div>
+    <script>
+
+    $('#logout').on('click', function (event) {
+      event.preventDefault();
+      $.removeCookie('jwt', { path: '/' });
+      location.reload();
+      return;
+    })
+
+    </script
 {% endblock %}
