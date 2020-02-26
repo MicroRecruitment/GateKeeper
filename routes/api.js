@@ -17,10 +17,17 @@ function CreateRoute(ctrl) {
       }
   });
   
-  router.get('/Apply/',
+  router.post('/Apply/',
     passport.authenticate('jwt', {session: false}),
     (req, res) => {
-      ctrl.Apply(req.body, x => {
+      console.log("Router | /api/Apply/");
+      const data = {
+        username: req.user.USERNAME,
+        comp: JSON.parse(req.body.comp),
+        avail: JSON.parse(req.body.avail),
+      };
+      console.log(data);
+      ctrl.Apply(data, x => {
         res.send(x);
       });
   });

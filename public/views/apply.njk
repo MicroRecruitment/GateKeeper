@@ -3,7 +3,7 @@
 {% block content %}
 <div class="divForm">
   <h1 class="headForm">To apply for a job, fill the form</h1>
-  <form id="main">
+  <form id="main" action="" method="post">
 
     <fieldset id="f1"></fieldset>
 
@@ -13,7 +13,46 @@
 
     <button id="b2" class="another">+</button>
 
+    <input type="submit" value="Done" class="logReg" />
   </form>
-  <button class="logReg">Done</button>
 </div>
+<script type="text/javascript" src="./static/js/apply.js"></script>
+<script>
+  $('form').on('submit', function (e) {
+    e.preventDefault();
+    let comptences = [];
+    let availablities = [];
+
+    $("#f1 > select").each(function (index) {
+      const val = $(this).val();
+      if (!comptences[index]) comptences[index] = {};
+      comptences[index].id = val;
+    });
+    $("#f1 > input").each(function (index) {
+      const years = $(this).val();
+      if (!comptences[index]) comptences[index] = {};
+      comptences[index].years = years;
+    });
+
+    $("#f2 > [name=fromDate]").each(function (index) {
+      const from = $(this).val();
+      if (!availablities[index]) availablities[index] = {};
+      availablities[index].from = from;
+    });
+    $("#f2 > [name=toDate]").each(function (index) {
+      const to = $(this).val();
+      if (!availablities[index]) availablities[index] = {};
+      availablities[index].to = to;
+    });
+
+    let stringFormData = 'ajax=true&comp=' + JSON.stringify(comptences) + '&avail=' + JSON.stringify(availablities);
+
+    $.post('/api/Apply/', stringFormData, () => {
+
+    });
+    console.log(comptences);
+    console.log(availablities);
+
+  });
+</script>
 {% endblock %}

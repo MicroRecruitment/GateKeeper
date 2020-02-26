@@ -1,25 +1,24 @@
 var counter_one = 1;
 var counter_two = 1;
-const f1_opts = [
-  'exp1',
-  'exp2',
-  'exp3',
-  'exp4',
-];
+const f1_opts = {
+  1: 'exp1',
+  2: 'exp2',
+  3: 'exp3',
+  4: 'exp4',
+};
 const f1_select = jQuery(
   '<select></select>',
   {
     class: 'apply',
-    id: '1',
     required: 'required',
   }
 );
-f1_opts.forEach((f1_opt) => {;
+Object.keys(f1_opts).forEach((key) => {;
   let f1_select_opt = jQuery(
     '<option></option>',
     {
-      value: f1_opt,
-      text: f1_opt,
+      value: key,
+      text: f1_opts[key],
     }
   );
   f1_select.append(f1_select_opt);
@@ -87,8 +86,6 @@ const f2_inputFrom = jQuery(
     class: 'apply',
     type: 'text',
     name: 'fromDate',
-    pattern: '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-    id: "#",
     placeholder: 'Avail. from yyyy-mm-dd',
     required: 'required',
   }
@@ -99,8 +96,6 @@ const f2_inputTo = jQuery(
     class: 'apply',
     type: 'text',
     name: 'toDate',
-    pattern: '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])',
-    id: "#",
     placeholder: 'Avail. to yyyy-mm-dd',
     required: 'required',
   }
