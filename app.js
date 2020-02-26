@@ -26,10 +26,10 @@ require('./config/passport')(controller);
 
 /* Nunjucks Templates setup */
 nunjucks.configure('public/views', {
-  express: app
+  express: app,
 });
 
 /* Start server */
-srv.listen(PORT, function () {
+srv.listen(PORT, function() {
   console.log('Server started on *:' + PORT);
 });

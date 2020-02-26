@@ -52,6 +52,7 @@ module.exports = (controller) => {
       failureRedirect: '/login'
     }),
     (req, res) => {
+      console.log(req.user);
       if (req.user.ROLE_ID == '1') {
         res.render('listApplicants.njk')
       } else {

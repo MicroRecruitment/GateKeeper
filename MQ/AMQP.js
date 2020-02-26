@@ -12,7 +12,12 @@ class AMQP {
     this.ready_ = new Promise(function(resolve, reject) {
       this.open = amqp.connect(HOST);
       this.open.then(this.Setup.bind(this))
-               .then(() => resolve(true));
+               .then(() => resolve(true))
+               .catch(err => {
+                 console.error('Could not connect to RabbitMQ');
+                 console.error(err);
+                 process.exit();
+               });
     }.bind(this)); 
   }
 
