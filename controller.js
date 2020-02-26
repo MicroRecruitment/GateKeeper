@@ -12,12 +12,22 @@ class Controller {
     require('./controllers/applicants.js')(this);
   }
 
+  /*
+   * Add callback from the request.
+   * @author: Linus Berg
+   * @param {function} callback function.
+   */
   AddCallback(cb) {
     let call_id = uuidv4();
     this.callbacks_[call_id] = cb;
     return call_id;
   }
 
+  /*
+   * Resolve callback from the request.
+   * @author: Linus Berg
+   * @param {obj} Return frame.
+   */
   ResolveCallback(frame) {
     let call_id = frame.metadata.call_id;
     this.callbacks_[call_id]({
