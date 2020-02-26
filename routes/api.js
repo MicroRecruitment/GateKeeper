@@ -40,7 +40,6 @@ function CreateRoute(ctrl) {
             res.status(422).send(v.errors);
           }
           else {
-            res.send({status: true});
             console.log(req.body);
             const state = req.body.accept == 'true' ? 2 : 3;
 

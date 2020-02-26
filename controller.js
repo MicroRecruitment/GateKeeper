@@ -1,6 +1,5 @@
 'use strict';
 const rmq = require('./MQ/AMQP.js');
-const model = require('./model.js');
 const uuidv4 = require('uuid/v4');
 
 class Controller {
