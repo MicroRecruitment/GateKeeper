@@ -60,11 +60,7 @@ module.exports = (ctrl) => {
       call: 'SetApplicant',
       call_id: this.AddCallback(cb)
     };
-    let content = {
-      username: applicant_data.username,
-      state: applicant_data.state
-    };
-    this.mq_.Send(APP_QUEUE, metadata, content);
+    this.mq_.Send(APP_QUEUE, metadata, applicant_data);
 
   }
 }

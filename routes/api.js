@@ -46,7 +46,7 @@ function CreateRoute(ctrl) {
             ctrl.SetApplicant(
               {
                 id: req.body.userId,
-                state: state,
+                status: state,
               },
               x => {
                 res.send(x);
