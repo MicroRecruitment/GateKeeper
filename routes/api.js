@@ -22,7 +22,7 @@ function CreateRoute(ctrl) {
     (req, res) => {
       console.log("Router | /api/Apply/");
       const data = {
-        username: req.user.USERNAME,
+        id: req.user.PERSON_ID,
         comp: JSON.parse(req.body.comp),
         avail: JSON.parse(req.body.avail),
       };
