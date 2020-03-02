@@ -1,6 +1,6 @@
 # GateKeeper
-## [The project wiki](https://github.com/MicroRecruitment/MicroRecruitment.github.io)
-The GateKeeper is the front end of the application.
+## [The project wiki](https://microrecruitment.github.io/)
+The GateKeeper is the front end of the application. It handles client requests.
 
 * app.js starts the application.
 * The different views can be found in the public directory. All of them inherit the layout.njk template.
