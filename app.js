@@ -6,7 +6,7 @@ const ctrl = require('./controller');
 const passport = require('passport');
 
 /* Constants */
-const PORT = 8081;
+const PORT = 8080;
 
 /* Routes */
 const app = express();
