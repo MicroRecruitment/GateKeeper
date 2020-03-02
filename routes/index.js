@@ -1,43 +1,68 @@
-const passport = require('passport');
-const router = require('express').Router();
+module.exports = (controller) => {
+  const passport = require('passport');
+  const router = require('express').Router();
 
-router.get('/login',
-  (req, res) => {
-    res.render('index.njk')
-  }
-);
+  router.get('/',
+    passport.authenticate('jwt', {
+      session: false,
+      failureRedirect: '/login'
+    }),
+    (req, res) => {
+      res.render('home.njk', {
+        user: req.user,
+      });
+    }
+  );
 
-router.get('/register',
-  (req, res) => {
-    res.render('register.njk')
-  }
-);
+  router.get('/login',
+    (req, res) => {
+      res.render('index.njk')
+    }
+  );
 
-router.get('/',
-  passport.authenticate('jwt', {
-    session: false,
-    failureRedirect: '/login'
-  }),
-  (req, res) => {
-    res.render('home.njk');
-  }
-);
+  router.get('/register',
+    (req, res) => {
+      res.render('register.njk')
+    }
+  );
 
-router.get('/apply',
-  (req, res) => {
-    res.render('apply.njk')
-  }
-);
+  router.get('/apply',
+    passport.authenticate('jwt', {
+      session: false,
+      failureRedirect: '/login'
+    }),
+    (req, res) => {
+      if (req.user.ROLE_ID != '1') {
+        res.render('apply.njk');
+      } else {
+        res.redirect('/admin');
+      }
+    }
+  );
 
-router.get('/present',
-  (req, res) => {
-    res.render('present.njk')
-  }
-);
+  router.get('/present',
+    (req, res) => {
+      res.render('present.njk')
+    }
+  );
 
-router.get('/listApplicants', (req, res) => {
-    res.render('listApplicants.njk')
-  }
-);
+  router.get('/admin',
+    passport.authenticate('jwt', {
+      session: false,
+      failureRedirect: '/login'
+    }),
+    (req, res) => {
+      console.log(req.user);
+      if (req.user.ROLE_ID == '1') {
+        res.render('listApplicants.njk')
+      } else {
+        res.send('Permission denied');
+      }
+    }
+  );
 
-module.exports = router
+  router.use('/auth/', require('./auth')(controller));
+  router.use('/api/', require('./api')(controller));
+
+  return router;
+}

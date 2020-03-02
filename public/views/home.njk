@@ -3,6 +3,20 @@
 {% block content %}
     <div>
         <h1>Temp User Home</h1>
-        <p>{{ user.NAME }} {{ user.SURNAME }}</p>
+        <p>Username: {{ user.USERNAME }}</p>
+        <p>RoleID: {{ user.ROLE_ID }}</p>
     </div>
+    <div>
+      <button id="logout">Logout</button>
+    </div>
+    <script>
+
+    $('#logout').on('click', function (event) {
+      event.preventDefault();
+      $.removeCookie('jwt', { path: '/' });
+      location.reload();
+      return;
+    })
+
+    </script
 {% endblock %}

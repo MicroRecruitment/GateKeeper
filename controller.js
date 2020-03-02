@@ -1,41 +1,49 @@
 'use strict';
 const rmq = require('./MQ/AMQP.js');
-const model = require('./model.js');
 const uuidv4 = require('uuid/v4');
 
 class Controller {
-  constructor(socket) {
+  constructor() {
     this.mq_ = new rmq(null, this.Process.bind(this));
-		this.socket_ = socket;
 
-		this.callbacks_ = {};
-    require('./controllers/auth.js')(this); 
-    require('./controllers/applicants.js')(this); 
+    this.callbacks_ = {};
+    require('./controllers/auth.js')(this);
+    require('./controllers/applicants.js')(this);
   }
-  
+
+  /*
+   * Add callback from the request.
+   * @author: Linus Berg
+   * @param {function} callback function.
+   */
   AddCallback(cb) {
-		let call_id = uuidv4();
-		this.callbacks_[call_id] = cb;
+    let call_id = uuidv4();
+    this.callbacks_[call_id] = cb;
     return call_id;
   }
 
+  /*
+   * Resolve callback from the request.
+   * @author: Linus Berg
+   * @param {obj} Return frame.
+   */
   ResolveCallback(frame) {
-		let call_id = frame.metadata.call_id;
-		this.callbacks_[call_id]({
-			status: frame.content.status,
-			result: frame.content.result
-		});
-		delete this.callbacks_[call_id];
+    let call_id = frame.metadata.call_id;
+    this.callbacks_[call_id]({
+      status: frame.content.status,
+      result: frame.content.result,
+    });
+    delete this.callbacks_[call_id];
   }
 
- /*
-	* Processing function for queue messages. Typically results.
-	* @author: Linus Berg
-	* @param {obj} Message object from RabbitMQ.
-	*/
+  /*
+   * Processing function for queue messages. Typically results.
+   * @author: Linus Berg
+   * @param {obj} Message object from RabbitMQ.
+   */
   Process(frame) {
-		/* Client callback, tell client what happened. */
-    this.ResolveCallback(frame); 
+    /* Client callback, tell client what happened. */
+    this.ResolveCallback(frame);
   }
 }
 

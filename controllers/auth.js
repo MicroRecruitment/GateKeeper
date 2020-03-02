@@ -3,6 +3,12 @@ const ENV = require('../env.json');
 const AUTH_QUEUE = ENV.queues.AUTH_QUEUE;
 
 module.exports = (ctrl) => {
+  /*
+	* Register user.
+  * @queue: auth_queue
+	* @author: Linus Berg
+	* @param {obj} Registration data.
+	*/
   ctrl.Register = async function(registration_data, cb) {
     let metadata = {
       call: 'register',

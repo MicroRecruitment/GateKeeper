@@ -11,19 +11,20 @@
     "express-jwt-permissions": "^1.3.3",
     "express-session": "^1.17.0",
     "jsonwebtoken": "^8.5.1",
+    "node-input-validator": "^4.2.0",
     "nunjucks": "*",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "permission": "^1.1.0",
-    "socket.io": "^2.3.0",
+    "prettier": "^1.19.1",
     "uuid": "^3.4.0",
-    "winston": "^3.2.1",
-    "zeromq": "*"
+    "winston": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {
     "start": "node app.js",
+    "format": "prettier --write *",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

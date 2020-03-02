@@ -41,15 +41,57 @@
     </select>
   </form>
   <button id="getApplications" class="logReg">Done</button>
+  <div id="applicants" style="display: none">
+    <h2>Applicants</h2>
+    <div id="applicants_list">
+
+    </div>
+  </div>
 </div>
 
 <script>
+  const applicant_model = jQuery('<div>').addClass('applicant');
+  applicant_model.append(jQuery('<span>').attr('id', 'name'));
+  applicant_model.append(jQuery('<span>').attr('id', 'email'));
+  const yes_button_model = jQuery('<button>').html('&#10003;');
+  const no_button_model = jQuery('<button>').html('X');
+
   $("#getApplications").on('click', function (event) {
     event.preventDefault();
-    $.getJSON("/GetAllApplicants", function(result){
-      $.each(result, function(i, field){
-      $("div").append(field + " ");
-      });
+    $.getJSON("/api/GetAllApplicants", function(data) {
+      console.log(data);
+      if (data.status) {
+        result_count = data.result.length;
+        $("#applicants_list").html('');
+        $("#applicants").show();
+        $.each(data.result, function(i, field) {
+          field.AVAILABILITIES = JSON.parse(field.AVAILABILITIES);
+          field.COMPETENCES = JSON.parse(field.COMPETENCES);
+
+          const applicant = applicant_model.clone();
+          const yes_button = yes_button_model.clone();
+          const no_button = no_button_model.clone();
+
+          applicant.append(yes_button);
+          applicant.append(no_button);
+
+          yes_button.click(() => {
+            let stringFormData = 'ajax=true&accept=true&userId=' + field.PERSON_ID;
+            $.post("/api/SetApplicant/",stringFormData, () => {
+              applicant.remove();
+            });
+          });
+          no_button.click(() => {
+            let stringFormData = 'ajax=true&accept=false&userId=' + field.PERSON_ID;
+            $.post("/api/SetApplicant/",stringFormData, () => {
+              applicant.remove();
+            });
+          });
+          $('#name', applicant).html(field.NAME + ' ' + field.SURNAME);
+          $('#email', applicant).html(field.EMAIL);
+          $("#applicants_list").append(applicant);
+        });
+      }
     });
   });
 </script>
