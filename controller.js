@@ -3,17 +3,29 @@ const rmq = require('./MQ/AMQP.js');
 const model = require('./model.js');
 const uuidv4 = require('uuid/v4');
 
-/* Queues to send requests to. */
-const APP_QUEUE = 'applicant_queue_linus';
-const ADMIN_QUEUE = 'admin_queue';
-
 class Controller {
   constructor(socket) {
-    /* Create new amqp connection with random consuming queue. */
     this.mq_ = new rmq(null, this.Process.bind(this));
 		this.socket_ = socket;
 
-		this.ongoing_ = {};
+		this.callbacks_ = {};
+    require('./controllers/auth.js')(this); 
+    require('./controllers/applicants.js')(this); 
+  }
+  
+  AddCallback(cb) {
+		let call_id = uuidv4();
+		this.callbacks_[call_id] = cb;
+    return call_id;
+  }
+
+  ResolveCallback(frame) {
+		let call_id = frame.metadata.call_id;
+		this.callbacks_[call_id]({
+			status: frame.content.status,
+			result: frame.content.result
+		});
+		delete this.callbacks_[call_id];
   }
 
  /*
@@ -21,36 +33,10 @@ class Controller {
 	* @author: Linus Berg
 	* @param {obj} Message object from RabbitMQ.
 	*/
-  Process(msg) {
-		var call_id = msg.data.call_id;
-		console.log(msg);
-		console.log(this.ongoing_);
+  Process(frame) {
 		/* Client callback, tell client what happened. */
-		this.ongoing_[call_id]({
-			status: msg.data.status,
-			result: msg.data.result
-		});
-		delete this.ongoing_[call_id];
+    this.ResolveCallback(frame); 
   }
-
- /*
-	* Controller function for registering a user.
-	* @author: Linus Berg
-	* @param {int} client_id Socket.io ID, for reply.
-	*/
-  async Register(registration_data, client_cb) {
-		console.log('Gateway Controller (Register)');
-		var call_id = uuidv4();
-
-		this.ongoing_[call_id] = client_cb;
-
-    this.mq_.Send(APP_QUEUE, {
-      call: 'register',
-			call_id: call_id,
-      registration_data: registration_data
-    });
-  }
-
 }
 
 module.exports = Controller;

@@ -1,28 +1,80 @@
 {% extends './layout.njk' %}
 
 {% block content %}
-    <div class="form">
-        <form id="register" class="loginForm" method="POST">
-            <input type="text"      name="name"     placeholder="Name"/>
-            <input type="text"      name="surname"  placeholder="Surname"/>
-            <input type="text"      name="ssn"      placeholder="Social Security Number"/>
-            <input type="text"      name="email"    placeholder="Email"/>
-            <input type="text"      name="username" placeholder="Username"/>
-            <input type="password"  name="password" placeholder="Password"/>
-            <button id="reg">REGISTER</button>
-        </form>
-    </div>
-    <script>
-        var socket = io();
-        $('#reg').on('click', function (evt) {
-            evt.preventDefault();
-            console.log('Websocket -> Gateway (Register)');
-            var form_data = $('#register').serializeArray();
-            console.log(form_data);
-            socket.emit('APPLICANT::REGISTER', form_data, function(reply) {
-                  console.log(reply);
-            });
-            return false;
-        });
-    </script>
+<div class="divForm">
+  <form id="register" class="loginForm" method="POST">
+    <input
+        type="text"
+        name="name"
+        placeholder="Forename"
+        pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
+        required
+        value="Test"
+    />
+    <input
+        type="text"
+        name="surname"
+        placeholder="Surname"
+        pattern="^[a-zA-ZåäöÅÄÖ]{2,20}$"
+        required
+        value="Testsson"
+    />
+    <input
+        type="text"
+        name="ssn"
+        placeholder="Social Security Number"
+        pattern="^\d{6,8}[-|(\s)]{0,1}\d{4}$"
+        required
+        value="20200120-1234"
+    />
+    <input
+        type="text"
+        name="email"
+        placeholder="Email"
+        required
+        value="test@domain.com"
+    />
+    <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        pattern="^[a-zA-ZåäöÅÄÖ]{1,255}$"
+        required
+        value="test"
+    />
+    <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+        value="test"
+    />
+    <button id="reg">REGISTER</button>
+  </form>
+</div>
+<script>
+  $('form#register').on('submit', function (evt) {
+    evt.preventDefault();
+    var formData = new FormData(document.getElementById("register"));
+    var object = {};
+    formData.forEach((value, key) => {
+      object[key] = value
+    });
+
+    console.log(object);
+
+    let stringFormData = 'ajax=true&'+$(this).serialize() ;
+    console.log(stringFormData);
+
+    $.post($(this).attr("action"), stringFormData, (data) => {
+        console.log("Login success: " + data);
+        if (data.redirect) {
+            window.location.href = data.redirect;
+        }
+    }).fail(() => {
+        $('#formError').html('Invalid username or password');
+    });
+    return false;
+  });
+</script>
 {% endblock %}

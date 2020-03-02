@@ -1,50 +1,54 @@
 'use strict';
 const express = require('express');
-const nunjucks  = require('nunjucks');
+const nunjucks = require('nunjucks');
 const io = require('socket.io');
 const http = require('http');
-const ctrl = require('./controller.js');
+const ctrl = require('./controller');
+const passport = require('passport');
 
 /* Constants */
 const PORT = 8081;
 
-var app = express();
-var srv = http.createServer(app);
-var socket = io(srv);
+/* Routes */
+const app = express();
+const srv = http.createServer(app);
+const socket = io(srv);
 
 /* Controller unit */
-var controller = new ctrl(socket);
+const controller = new ctrl(socket);
 
-app.use(express.static('./public'));
+/* Middleware */
+require('./config/middleware.js')(app);
 
-nunjucks.configure('./public/views', {
+/* Routes */
+app.use('/', require('./routes/'));
+app.use('/auth/', require('./routes/auth')(controller));
+app.use('/api/', require('./routes/api')(controller));
+
+/* Passport */
+require('./config/passport')(controller);
+
+/* Nunjucks Templates setup */
+nunjucks.configure('public/views', {
   express: app
-})
+});
 
-// Routes
-app.get('/register', (req, res, next) =>{
-  res.render('register.njk')
-})
-
-app.use((req, res, next) =>{
-  res.render('index.njk')
-})
-
-srv.listen(PORT, function() {
+/* Start server */
+srv.listen(PORT, function () {
   console.log('Server started on *:' + PORT);
 });
 
 /* Setup Socket.io events. */
-socket.on('connection', function(client) {
-	console.log('Connected Client id: ' + client.id);
+socket.on('connection', function (client) {
+  console.log('Connected Client id: ' + client.id);
 
-	/* Client completed registration. */
-  client.on('APPLICANT::REGISTER', function(registration_data, cb) {
+  /* Client completed registration. */
+  client.on('APPLICANT::REGISTER', function (registration_data, cb) {
     console.log('Gateway (Websocket Event)');
-    controller.Register(registration_data, cb);
   });
 
-  client.on('ADMINISTRATOR::SET', function(percent) {});
+  client.on('ADMINISTRATOR::SET', function (percent) {
+  });
 
   client.on('disconnect', (reason) => console.log(reason));
 });

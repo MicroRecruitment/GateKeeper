@@ -2,16 +2,34 @@ body {
   font-family: "Roboto", sans-serif;
   background: #76b852;
 }
-.form {
+.divForm {
   position: relative;
   background: #FFFFFF;
-  max-width: 15em;
+  max-width: 20em;
   margin: 8% auto 2em;
   padding: 3em;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-.form input {
+.divForm button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.divForm .message {
+  margin: 1em 0 0;
+  color: #b3b3b3;
+  font-size: 0.7em;
+}
+.divForm .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+h1.headForm{
+  display: block;
+  margin-bottom: 1em;
+  text-align: center;
+  font-size: 1em;
+}
+input.logReg {
   background: #f2f2f2;
   width: 100%;
   border: 0;
@@ -20,7 +38,7 @@ body {
   box-sizing: border-box;
   font-size: 0,7em;
 }
-.form button {
+button.logReg {
   background: #4CAF50;
   width: 100%;
   border: 0;
@@ -28,15 +46,33 @@ body {
   color: #FFFFFF;
   font-size: 0.8em;
 }
-.form button:hover,.form button:active,.form button:focus {
-  background: #43A047;
+select.apply{
+  display: inline-block;
+  background: #f2f2f2;
+  width: 30%;
+  margin: 0 0 1em;
+  padding: 0.5em;
+  font-size: 0,7em;
 }
-.form .message {
-  margin: 1em 0 0;
-  color: #b3b3b3;
-  font-size: 0.7em;
+input.apply{
+  display: inline-block;
+  background: #f2f2f2;
+  width: 37%;
+  border: 0;
+  margin: 1em 0.1em 1em 0.1em;
+  padding: 0.5em;
+  font-size: 0,7em;
 }
-.form .message a {
-  color: #4CAF50;
-  text-decoration: none;
+button.another{
+  height: 3em;
+  width: 3em;
+  display: block;
+  margin: 1em auto;
+  box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2), 0 0.2em 0.2em 0 rgba(0, 0, 0, 0.24);
+  border: none;
+  border-radius: 50%;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  font-size: 1em;
 }
