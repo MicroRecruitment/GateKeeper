@@ -23,6 +23,11 @@ body {
   color: #4CAF50;
   text-decoration: none;
 }
+
+.divForm .error {
+  color: red;
+}
+
 h1.headForm{
   display: block;
   margin-bottom: 1em;
@@ -67,10 +72,4 @@ button.another{
   color: white;
   text-align: center;
   font-size: 1em;
-}
-.form .error {
-  color: red;
-}
-.form .error {
-  color: red;
 }
