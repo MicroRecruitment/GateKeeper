@@ -8,7 +8,7 @@ const passport = require('passport');
 /* Constants */
 const PORT = 8080;
 
-/* Routes */
+/* Init server */
 const app = express();
 const srv = http.createServer(app);
 
